@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {from, interval, range, take, timer} from 'rxjs';
+import {combineLatest, delay, from, generate, interval, of, range, take, timer, zip} from 'rxjs';
 
 @Component({
   selector: 'app-test2',
@@ -36,5 +36,23 @@ export class Test2Component {
 
   fetchData6() {
     range(1, 5).subscribe(value => console.log('范围值:', value));
+  }
+
+  fetchData7() {
+    generate({
+      initialState: 1,
+      iterate: value => value + 1,
+      condition: value => value < 5
+      }
+    )
+      .subscribe(value => console.log('生成值:', value));
+  }
+
+  fetchData8() {
+    combineLatest([of(1, 2, 3).pipe(delay(1000)), of('A', 'B', 'C')]).subscribe(([num, char]) => console.log('组合值:', num, char));
+  }
+
+  fetchData9() {
+    zip(of(1, 2, 3), of('A', 'B', 'C', 'D')).subscribe(([num, char]) => console.log('配对值:', num, char));
   }
 }
